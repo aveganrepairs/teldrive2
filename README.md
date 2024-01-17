@@ -4,7 +4,7 @@ Telegram Drive is a powerful utility that enables you to create your own cloud s
 
 [![Discord](https://img.shields.io/discord/1142377485737148479?label=discord&logo=discord&style=flat-square&logoColor=white)](https://discord.gg/J2gVAZnHfP)
 
-**Click on icon to join Discord Server for better support**
+**Click on icon to join Discord Server for  more advanced configurations for uploads and better support**
 
 [Read Wiki for FAQ](https://github.com/divyam234/teldrive/wiki).
 
@@ -31,7 +31,7 @@ Telegram Drive is a powerful utility that enables you to create your own cloud s
 ## Features
 
 - **UI:** Based on Material You to create nice looking UI themes.
-- **Secure:** Your data is secured using Telegram's robust encryption.
+- **Secure:** Your data is secured using robust encryption.
 - **Flexible Deployment:** Use Docker Compose or deploy without Docker.
 
 ## Demo
@@ -59,10 +59,7 @@ docker compose up -d
 ```
 
 - **Go to http://localhost:8080**
-- **Uploads from UI will be slower due to limitations of browser use [Rclone](https://github.com/divyam234/rclone) for faster uploads.Make sure to use Multi Bots mode if you are using uploader.**
-
-- **If you intend to share download links with others, ensure that you enable multi bots mode with bots.**
-
+- **Uploads from UI will be slower due to limitations of browser use [Rclone](https://github.com/divyam234/rclone) for faster uploads.Make sure to add bots.**
 ### Use without docker
 
 **Follow Below Steps**
@@ -89,17 +86,18 @@ When used with `docker-compose.postgres.yml`:
 DATABASE_URL=postgres://teldrive:secret@db/teldrive
 ```
 
-> **Warning**
+> [!IMPORTANT]
 > Default Channel can be selected through UI make sure to set it from account settings on first login.<br>
 > Use strong JWT secret instead of pure guessable string.You can use openssl to generate it.<br>
 
 ```bash
 $ openssl rand -hex 32
 ```
+Or generate from here https://generate-secret.vercel.app/32
 
 **Multi Bots Mode is recommended to avoid flood errors and enable maximum download speed, especially if you are using downloaders like IDM and aria2c which use multiple connections for downloads.**
 
-> **Note**
+> [!NOTE]
 > What it multi bots feature and what it does? <br>
 > This feature shares the Telegram API requests between other bots to avoid getting floodwaited (A kind of rate limiting that Telegram does in the backend to avoid flooding their servers) and to make the server handle more requests. <br>
 
@@ -129,15 +127,23 @@ In addition to the mandatory variables, you can also set the following optional 
 
 - `COOKIE_SAME_SITE` : Only needed when frontend is on other domain (Default true).
 
-- `LAZY_STREAM_BOTS` : If set to true start Bot session and close immediately when stream or download request is over otherwise run bots forever till server stops (Default false).
-
-- `BG_BOTS_LIMIT` : If LAZY_STREAM_BOTS is set to false it start atmost BG_BOTS_LIMIT no of bots in background to prevent connection recreation on every request (Default 5).
+- `BG_BOTS_LIMIT` : Start atmost BG_BOTS_LIMIT no of bots in background to prevent connection recreation on every request (Default 5).
 
 - `UPLOAD_RETENTION` : No of days to keep incomplete uploads parts in channel afterwards these parts are deleted (Default 15).
 
+- `ENCRYPTION_KEY`  : Password for Encryption.
+
+- `DEV` : DEV mode to enable debug logging(Default false).
+
+- `LOG_SQL` : Log sql queries (Default false).
+
+> [!WARNING]
+> Keep your Password safe once generated teldrive uses same encryption as of rclone internally 
+so you don't need to enable crypt in rclone.**Teldrive generates random salt for each file part and saves in database so its more secure than rclone crypt whereas in rclone same salt value  is used  for all files which can be compromised easily**. Enabling crypt in rclone makes UI reduntant so encrypting files in teldrive internally is better way to encrypt files and more secure encryption than rclone.To encrypt files see more about teldrive rclone config.
+
 ### For making use of Multi Bots support
 
-> **Warning**
+> [!WARNING]
 > Bots will be auto added as admin in channel if you set them from UI if it fails somehow add it manually.
 
 ## FAQ
